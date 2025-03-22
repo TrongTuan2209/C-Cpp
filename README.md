@@ -1,4 +1,10 @@
-# Advance C/Cpp
+# Advance C
+<h3>📖 SUMMARY </h3>
+<details>
+  <summary><font size="10"><b> COMPILER - MACRO </front></b></summary>
+  
+  ---
+
 ## I. Compiler
 - Compiler là một chương trình dịch mã nguồn (source code) thành ngôn ngữ máy để thực thi trên máy tính.
   ### Quá trình biên dịch:
@@ -8,21 +14,21 @@
     - Xóa comment
     - Expand Marco: là quá trình thay thế macro (định nghĩa bằng #define) bằng giá trị hoặc đoạn mã tương ứng trong giai đoạn tiền xử lý (Preprocessing) trước khi biên dịch.
 
-    ---> Dùng câu lệnh gcc -E program.c -o program.i
+    > Dùng câu lệnh gcc -E program.c -o program.i
   
   #### 2. Compilation (Biên dịch):
     - Dịch mã nguồn .i thành mã Assembly .s
 
-    ---> Dùng câu lệnh gcc -S program.c -o program.s
+    > Dùng câu lệnh gcc -S program.i -o program.s
 
   #### 3. Assembly (Dịch Assembly):
     - Dịch mã Assembly .s thành mã máy (Object code) .o
 
-    ---> Dùng câu lệnh gcc -o program program.s
+    > Dùng câu lệnh gcc -c program.s -O program.o
   #### 4. Linking
     - Ghép nhiều file object .o và thư viện để tạo ra file thực thi .exe hoặc .out
 
-    ---> Dùng câu lệnh gcc -o program main.c utils.c
+    > Dùng câu lệnh gcc -o program main.c utils.c
 
 ## II. MACRO và chỉ thị tiền xử lý
   ### 1. Macro:
@@ -142,7 +148,7 @@
   - **#else** dùng khi không có điều kiện nào ở trên đúng.
   - Dùng **#if, #elif, #else** khi:
       - Muốn trình biên dịch có điều kiện (ví dụ muốn chạy trên Win hay Linux)
-      - Khi làm việc với macro và cấu hình (muốn bật tắt tính năng mà k phải sửa code nhiều)
+      - Khi làm việc với macro và cấu hình (muốn bật tắt tính năng mà k phải sửa code nhiều lần)
       - Khi tối ưu hóa code để chạy trên nhiều môi trường khác nhau (x86 hoặc ARM)
 
   _Ex:_
@@ -292,6 +298,145 @@
         return 0;
     }
   ```
+
+  #### 2.5. #ifdef, #ifndef:
+  - #ifdef dùng để kiểm tra một macro đã được định nghĩa hay chưa, nếu macro đã được định nghĩa thì mã nguồn sau #ifdef sẽ được biên dịch.
+  - #ifndef dùng để kiểm tra một macro đã được định nghĩa hay chưa, nếu macro chưa được định nghĩa thì mã nguồn sau #ifndef sẽ được biên dịch
+  - Dùng #ifdef cũng để tránh trường hợp khi 1 file #include nhiều lần gây ra lỗi biên dịch như ví dụ sau sẽ gặp lỗi define nhiều lần
+  
+  _Ex:_
+
+  file abc.txt:
+
+  ```c
+      #ifndef __ABC_H
+      #define __ABC_H
+      
+      int a = 10;
+      
+      #endif
+  ```
+
+  file main.c:
+
+  ```c
+    #include <stdio.h>
+    
+    #include "abc.txt"
+    #include "abc.txt"
+    #include "abc.txt"
+    
+    
+    int main()
+    {
+        printf("Hello \n");
+        
+        return 0;
+    }
+  ```
+
+  _Ex: kiểm tra file include nhiều lần bằng **Header Guard**_
+
+  ```c
+    #ifndef TEST_H
+    #define TEST_H ...
+  ```
+
+  _Có cách đơn giản hơn là dùng #pragma once_
+
+  ### 3. Các toán tử tiền xử lý:
+
+  #### 3.1. Toán tử stringize "#":toán tử này cho phép chuyển đổi các tham số thành chuỗi
+
+  _Ex:_
+
+  ```c
+    #include <stdio.h>
+    
+    #define STRINGIZE(x) #x
+    #define DATA 40
+    
+    int main() {
+    
+        // Sử dụng toán tử #
+        printf("The value is: %s\n", STRINGIZE(DATA));
+    
+        return 0;
+    }
+  ```
+
+  #### 3.2. Toán tử token pasting "##" : toán tử nối 2 token lại với nhau
+
+  _Ex:_
+
+  ```c
+    #include <stdio.h>
+    
+    #define CREATE_VAR(name, num) int name##num = num;
+    
+    int main() {
+        CREATE_VAR(var, 1)  // Tạo ra int var1 = 1;
+        CREATE_VAR(var, 2)  // Tạo ra int var2 = 2;
+    
+        printf("%d, %d\n", var1, var2);  //output: 1, 2
+        return 0;
+    }
+  ```
+
+  #### 3.3. Toán tử variadic: Dùng cho hàm chưa biết số lượng tham số truyền vào
+
+  - Syntax: #define MACRO_NAME(...) macro_expansion(__VA_ARGS__)
+    ... đại diện danh sách đối số
+    __VA_ARGS__ đại diện cho tất cả các tham số truyền vào sau dấu ...
+
+  ```c
+    #include <stdio.h>
+    
+    #define LOG(fmt, ...) printf("[LOG] " fmt "\n", __VA_ARGS__)
+    
+    int main() {
+        LOG("Hello, %s!", "World");  // printf("[LOG] Hello, %s!\n", "World");
+        LOG("Sum: %d + %d = %d", 5, 10, 5 + 10);
+        return 0;
+    }
+  ```
+
+  - fmt: Chuỗi format (ví dụ: "[LOG] " fmt "\n").
+  - __VA_ARGS__: Các tham số còn lại truyền vào printf.
+
+
+  _##__VA_ARGS__ Variadic Macro không cần đối số:  Dấu ##__VA_ARGS__ giúp tránh lỗi nếu không có tham số nào truyền vào._
+  
+  ```c
+    #include <stdio.h>
+    
+    // Định nghĩa macro DEBUG_PRINT với __VA_ARGS__
+    #define DEBUG_PRINT(fmt, ...) printf("[DEBUG] " fmt "\n", ##__VA_ARGS__)
+    
+    int main() {
+        int x = 10, y = 20;
+    
+        // In chuỗi đơn giản
+        DEBUG_PRINT("Program started");
+    
+        // In biến với format string
+        DEBUG_PRINT("Value of x: %d", x);
+        DEBUG_PRINT("Sum of x and y: %d + %d = %d", x, y, x + y);
+    
+        return 0;
+    }
+  ```
+
+
+
+
+
+
+
+
+
+
+
 
 
 
