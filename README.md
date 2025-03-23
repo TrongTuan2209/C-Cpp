@@ -1,8 +1,8 @@
 # Advance C
-<h3>📖 SUMMARY </h3>
+<h3>📕 SUMMARY </h3>
 <details>
-  <summary><font size="10"><b> COMPILER - MACRO </front></b></summary>
-  
+  <summary><font size="10"><b>📑 COMPILER - MACRO </b></front></summary>
+
   ---
 
 ## I. Compiler
@@ -33,8 +33,8 @@
 ## II. MACRO và chỉ thị tiền xử lý
   ### 1. Macro:
  - Macro là một tính năng của compiler trong c, nó dùng để thay thế 1 giá trị hay đoạn mã được định nghĩa bằng #define ở preprocessing. Nó không tốn bộ nhớ hay thời gian chạy, do quá trình này diễn ra trước khi biên dịch
- -  Syntax: #define TÊN_MACRO nội_dung_thay_thế
- -  Macro không kiểm tra kiểu dữ liệu như hàm
+ - Syntax: #define TÊN_MACRO nội_dung_thay_thế
+ - Macro không kiểm tra kiểu dữ liệu như hàm
 
   ### 2. Các chỉ thị tiền xử lý:
   #### 2.1. #include:
@@ -426,8 +426,197 @@
         return 0;
     }
   ```
+    
+</details>
 
+  ---
 
+<details>
+  <summary><font size="10"><b>📑 STDARG - ASSERT </b></front></summary>
+  
+  ---
+
+## I. Thư viện stdarg
+
+  - Cung cấp các phương thức để làm việc với các hàm có số lượng input parameter không cố định (như printf, scanf, ...)
+  - Các phương thức như:
+    | **Macro**                           | **Mô tả** |
+    |-------------------------------------|-----------|
+    | `va_list`                           | Kiểu dữ liệu khai báo một biến cho list các đối số |
+    | `va_start(va_list, last_fixed_arg)`       | Khởi tạo danh sách đối số, nhận vào 2 tham số là biến **va_list** được khai báo ở trên và **last_fixed_arg** là tên của đối số cuối cùng có kiểu cố định trước danh sách đối số không cố định |
+    | `va_arg(va_list, type)`             | Lấy giá trị của đối số tiếp theo trong danh sách, có kiểu type |
+    | `va_end(va_list)`                   | Kết thúc việc sử dụng list đối số biến đổi (cần gọi trước khi kết thúc hàm) |
+    | `va_copy(arg2, arg1)`               | Dùng để copy dữ liệu cùng kiểu va_list (copy arg1 gán cho arg2)  |
+
+  _Ex:_
+
+  ```c
+    #include <stdarg.h>
+    #include <stdio.h>
+    
+    // Hàm tính tổng các số
+    int sum(int count, ...) {  //count dùng để xác định số lượng tham số
+        va_list args;  // Khai báo biến danh sách đối số
+        va_start(args, count);  // Khởi tạo danh sách, count là đối số cuối cùng có kiểu cố định giúp xác định vị trí của danh sách đối số biến đổi.
+        int total = 0;
+    
+        for (int i = 0; i < count; i++) {
+            total += va_arg(args, int);  // Lấy từng đối số và cộng vào tổng
+        }
+    
+        va_end(args);  // Kết thúc danh sách đối số
+        return total;
+    }
+    
+    int main() {
+        printf("Tổng: %d\n", sum(3, 10, 20, 30)); // Kết quả: 60
+        printf("Tổng: %d\n", sum(5, 1, 2, 3, 4, 5)); // Kết quả: 15
+        return 0;
+    }
+  ```
+
+  _Ex: kiểu struct_
+
+  ```c
+    #include <stdio.h>
+    #include <stdarg.h>
+    
+    
+    typedef struct Data
+    {
+        int x;
+        double y;
+    } Data;
+    
+    void display(int count, ...) {
+    
+        va_list args;
+    
+        va_start(args, count);
+    
+        int result = 0;
+    
+        for (int i = 0; i < count; i++)
+        {
+            Data tmp = va_arg(args,Data);
+            printf("Data.x at %d is: %d\n", i,tmp.x);
+            printf("Data.y at %d is: %f\n", i,tmp.y);
+        }
+       
+    
+        va_end(args);
+    
+    
+    }
+    
+    int main() {
+    
+    
+        display(3, (Data){2,5.0} , (Data){10,57.0}, (Data){29,36.0});
+        return 0;
+    }
+  ```
+
+  _Ex: không có số lượng tham số truyền vào như ở ví dụ trên_
+
+  ```c
+    #include <stdio.h>
+    #include <stdarg.h>
+    
+    typedef enum {
+        TEMPERATURE_SENSOR,
+        PRESSURE_SENSOR
+    } SensorType;
+    
+    void processSensorData(SensorType type, ...) {  //SensorType type là tham số cố định để va_start hoạt động, nó không nhất thiết phải là int count
+        va_list args;
+        va_start(args, type);
+    
+        switch (type) {
+            case TEMPERATURE_SENSOR: {
+                int numArgs = va_arg(args, int);
+                int sensorId = va_arg(args, int);
+                float temperature = va_arg(args, double); // float được promote thành double
+                printf("Temperature Sensor ID: %d, Reading: %.2f degrees\n", sensorId, temperature);
+                if (numArgs > 2) {
+                    // Xử lý thêm tham số nếu có
+                    char* additionalInfo = va_arg(args, char*);
+                    printf("Additional Info: %s\n", additionalInfo);
+                }
+                break;
+            }
+            case PRESSURE_SENSOR: {
+                int numArgs = va_arg(args, int);
+                int sensorId = va_arg(args, int);
+                int pressure = va_arg(args, int);
+                printf("Pressure Sensor ID: %d, Reading: %d Pa\n", sensorId, pressure);
+                if (numArgs > 2) {
+                    // Xử lý thêm tham số nếu có
+                    char* unit = va_arg(args, char*);
+                    printf("Unit: %s\n", unit);
+                }
+                break;
+            }
+        }
+    
+        va_end(args);
+    }
+    
+    int main() {
+        processSensorData(TEMPERATURE_SENSOR, 2, 1, 36.5, "Room Temperature");
+        processSensorData(PRESSURE_SENSOR, 2, 2, 101325);
+        return 0;
+    }
+  ```
+
+  **NOTE:**
+
+  - Các tham số truyền vào phải có cùng kiểu dữ liệu, nếu không có thể gây lỗi undefined behavior
+  - Có thể không cần truyền tham số xác định số lượng đối số cần truyền vào nếu biết được chính xác số lượng cần truyền là bao nhiêu
+
+## II. Thư viện assert
+  - Cung cấp macro assert để kiểm tra một điều kiện. 
+  - Nếu điều kiện đúng (true), không có gì xảy ra và chương trình tiếp tục thực thi.
+  - Nếu điều kiện sai (false), chương trình dừng lại và thông báo một thông điệp lỗi.
+  - Dùng trong debug, dùng **#define NDEBUG** để tắt debug
+
+  _Ex:_
+
+  ```c
+    #include <stdio.h>
+    #include <assert.h>
+    
+    void divide(int a, int b) {
+        assert(b != 0 && "Mau phai khac 0");  // Kiểm tra b có khác 0 không
+        printf("Result: %d\n", a / b);
+    }
+    
+    int main() {
+        int x = 10, y = 0;
+        divide(x, 2);  // Hợp lệ, in kết quả
+        divide(x, y);  // Lỗi: assert(b != 0) sẽ kích hoạt lỗi và dừng chương trình
+    
+        return 0;
+    }
+  ```
+
+  > Output: Assertion failed: b != 0 && "Mau phai khac 0", file main.c, line 6.
+
+  - Hoặc có thể dùng #define như sau:
+
+  ```c
+    #include <stdio.h>
+    #include <assert.h>
+
+    #define LOG(condition, cmd) assert(condition && #cmd)  // '#' dùng để biến thành chuỗi
+    
+    void divide(int a, int b) {
+        LOG(b != 0, Mau phai khac 0);  // Kiểm tra b có khác 0 không
+        printf("Result: %d\n", a / b);
+    }
+  ```
+
+</details>
 
 
 
