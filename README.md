@@ -618,6 +618,111 @@
 
 </details>
 
+  ---
+
+<details>
+  <summary><font size="10"><b>📑 BITMASK </b></front></summary>
+  
+  ---
+
+</details>
+
+  ---
+
+<details>
+  <summary><font size="10"><b>📑 POINTER </b></front></summary>
+  
+  ---
+
+## I. Khái niệm Pointer
+  - Con trỏ (pointer) là một biến chứa địa chỉ bộ nhớ của một đối tượng khác (biến, mảng, hàm). 
+  - Sử dụng con trỏ để thao tác trên bộ nhớ linh hoạt hơn.
+  - Kích thước của con trỏ sẽ phụ thuộc vào kiến trúc máy tính, trình biên dịch hoặc kiến trúc vi xử lý (máy tính 64bit thì kích thước con trỏ là 8 byte)
+
+## II. Cách lưu trữ của con trỏ
+  - Trong hệ thống máy tính, dữ liệu được lưu trữ theo dạng bit và byte
+  - LSB (Least Significant Bit) và MSB (Most Significant Bit):
+    - LSB: Bit có trọng số nhỏ nhất (ít quan trọng nhất), thường là bit ngoài cùng bên phải trong hệ thống số nhị phân.
+    - MSB: Bit có trọng số lớn nhất (quan trọng nhất), thường là bit ngoài cùng bên trái trong hệ thống số nhị phân.
+  
+    _Ex:_
+      0b1011 0101 ======> ở đây LSB sẽ là bit 0 (giá trị là 0b1), MSB là bit 8 (giá trị là 0b1)
+  - Endianness gồm có:
+    - Little-Endian: LSB (byte) được lưu ở địa chỉ thấp nhất (phổ biến hiện nay).
+
+    _Ex:_
+    
+      | **Address**  | **Giá trị (Hex)** | **Ghi chú** |
+      |-----------|------------------|------------|
+      | `0x1000`  | `78`             | *(LSB - Byte ít quan trọng nhất)* |
+      | `0x1001`  | `56`             | |
+      | `0x1002`  | `34`             | |
+      | `0x1003`  | `12`             | *(MSB - Byte quan trọng nhất)* |
+
+    - Big-Ediant: MSB (byte) được lưu ở địa chỉ thấp nhất.
+
+    _Ex:_
+
+      | **Address**  | **Giá trị (Hex)** | **Ghi chú** |
+      |-----------|------------------|------------|
+      | `0x1000`  | `12`             | *(MSB - Byte quan trọng nhất)* |
+      | `0x1001`  | `34`             | |
+      | `0x1002`  | `56`             | |
+      | `0x1003`  | `78`             | *(LSB - Byte ít quan trọng nhất)* |
+
+  int var = 10 ===> có kích thước bộ nhớ 4 byte (Address: **0x01 0x02 0x03 0x04**)
+  int* ptr = &var ===> có kích thước 8 byte (Win 64bit), ví dụ như:
+      Address:  0xc1 0xc2 0xc3 0xc4 0xc5 ... 0xc8
+      Value:    0x01 0x02 0x03 0x04 0x00 ... 0x00 (4 byte còn lại không có giá trị lưu nên là 0x00)
+
+  ## III. Cách sử dụng con trỏ
+  
+  _Ex: truyền con trỏ vào 1 hàm_
+
+  ```c
+    #include <stdio.h>
+    
+    void swap(int* a, int* b)
+    {
+      int tmp = *a;
+      *a = *b;
+      *b = tmp;
+    }
+    
+    int main()
+    {
+      int a = 10, b = 20;
+      swap(&a, &b);
+      printf("valuw a is: %d\n", a);
+      printf("valuw b is: %d\n", b);
+      return 0;
+    }
+  ```
+
+  - Nếu muốn thay đổi giá trị thông quan 1 hàm thì phải sử dụng con trỏ, vì khi truyền vào hàm là 1 biến thông thường thì       nó sẽ sao chép giá trị của biến (nghĩa là sẽ tạo ra 1 địa chỉ khác). Do đó để thay đổi giá trị biến thông qua hàm phải      dùng con trỏ để thao tác trên dịa chỉ của biến đó
+
+   _Ex: dùng con trỏ thao tác với mảng_
+
+  ```c
+    #include <stdio.h>
+    
+    int main()
+    {
+      int arr[] = {1, 2, 3, 4, 5};
+      int n = (sizeof(arr)/sizeof(arr[0]));  //lấy số lượng phần tử trong mảng
+      int* ptr = arr;  //arr chính là &arr[0]
+    
+      for(int i = 0; i < n; i++)
+      {
+        printf("Giá trị của arr[%d] là: %d, ở địa chỉ: %p\n", i, arr[i], ptr+i);  //ptr + i có nghĩa là ptr + i.sizeof(data_type)
+      }
+    }
+  ```
+
+
+   
+</details>
+
 
 
 
