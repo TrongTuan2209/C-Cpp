@@ -719,8 +719,36 @@
     }
   ```
 
+  ## III. Các loại con trỏ đặc biệt
 
-   
+  ### 1. Void Pointer:
+  
+  - Void pointer là con trỏ dùng để trỏ tới địa chỉ mà tại đó không cần biết kiểu dữ liệu của giá trị mà địa chỉ đó đang lưu trữ
+  - Void pointer giúp viết code linh hoạt hơn, phù hợp với lập trình tổng quát và xử lý dữ liệu động.
+  - Void pointer còn dùng để tối ưu hóa bộ nhớ (vì dùng int*, hay float* sẽ bị phình bộ nhớ)
+  - Syntax: **void* ptr**
+
+  _Ex:_
+
+  ```c
+    #include <stdio.h>
+    
+    int main()
+    {
+      void* ptr;
+      int a = 10;
+      double b = 6.5;
+
+      ptr = &a;
+      printf("Địa chỉ: %p - Value: %d\n", ptr, *(int*)ptr);  //phải ép về kiểu *int
+
+      ptr = &b;
+      printf("Địa chỉ: %p - Value: %f\n", ptr, *(double*)ptr);
+
+    return 0;
+    }
+  ```
+
 </details>
 
 
