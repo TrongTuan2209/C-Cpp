@@ -726,6 +726,7 @@
   - Void pointer là con trỏ dùng để trỏ tới địa chỉ mà tại đó không cần biết kiểu dữ liệu của giá trị mà địa chỉ đó đang lưu trữ
   - Void pointer giúp viết code linh hoạt hơn, phù hợp với lập trình tổng quát và xử lý dữ liệu động.
   - Void pointer còn dùng để tối ưu hóa bộ nhớ (vì dùng int*, hay float* sẽ bị phình bộ nhớ)
+  - Dungf void pointer khi lấy giá trị phải ép kiểu
   - Syntax: **void* ptr**
 
   _Ex:_
@@ -745,8 +746,103 @@
       ptr = &b;
       printf("Địa chỉ: %p - Value: %f\n", ptr, *(double*)ptr);
 
+      char arr[] = "Hello World";
+
+      //Mảng con trỏ void
+      void* ptr1[] = {&a, &b, arrr};
+      printf("Địa chỉ: %p - Value: %d\n", ptr1[0], *(int*)ptr1[0]);
+      printf("Địa chỉ: %p - Value: %f\n", ptr1[1], *(int*)ptr1[1]);
+      printf("Địa chỉ: %p - Value: %c\n", ptr1[2], *(int*)ptr1[2]);     
+
     return 0;
     }
+  ```
+
+  ### 2. Function Pointer:
+
+  - Con trỏ hàm là một biến lưu địa chỉ của 1 hàm.
+  - Con trỏ hàm cho phép truyền một hàm như đối số cho hàm khác, lưu địa chỉ hàm trong một cấu trúc dữ liệu, hoặc truyền hàm như một giá trị trả về từ hàm khác.
+  - Syntax:
+
+    >  <return_type> (*func_poiter)(<data_type_1>, <data_type_2>);
+    > func_point = name_func (hoặc &name_func)  //gán địa chỉ hàm cho con trỏ hàm
+
+  - Để gọi hàm từ con trỏ hàm có thể dùng
+
+    > ptr()
+    > hoặc (*ptr)()
+
+  _Ex1:_
+
+  ```c
+    #include <stdio.h>
+    
+    void greetEnglish(){ printf("Hello!\n"); }
+    void greetFrench(){ printf("Bonjour!\n"); }
+    
+    int main()
+    {
+        // Khai báo con trỏ hàm
+        void (*ptrToGreet)();
+    
+        // Gán địa chỉ của hàm greetEnglish cho con trỏ hàm
+        ptrToGreet = greetEnglish;
+    
+        // Gọi hàm thông qua con trỏ hàm
+        ptrToGreet();  // In ra: Hello!
+    
+        // Gán địa chỉ của hàm greetFrench cho con trỏ hàm
+        ptrToGreet = greetFrench;
+    
+        // Gọi hàm thông qua con trỏ hàm
+        (*ptrToGreet)();  // In ra: Bonjour!
+        return 0;
+    }
+
+  ```
+
+  _Ex2:_
+
+  ```c
+#include <stdio.h>
+
+void sum(int a, int b) { return a+b; }
+void subtract(int a, int b) { return a-b; }
+void multiple(int a, int b) { return a*b; }
+void devide(int a, int b) { return a/b; }
+
+===========================Cách 1================================
+int main()
+{
+  void (*calc)(int, int);
+
+  calc = sum;
+  calc(2,3);
+
+  calc = subtract;
+  calc(2,3);
+
+  ...
+
+  return 0;
+}
+
+===========================Cách 2==================================
+int main()
+{
+  void (*calc[])(int, int) = {sum, subtract, multiple, devide};
+  calc[0](2,3);
+  calc[1](2,3);
+  ...
+
+  return 0;
+}
+
+===========================Cách 3==================================
+void calculate(void (*calc)(int, int), int a, int b)
+{
+  
+} 
   ```
 
 </details>
