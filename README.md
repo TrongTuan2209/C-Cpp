@@ -28,7 +28,7 @@
   #### 4. Linking
     - Ghép nhiều file object .o và thư viện để tạo ra file thực thi .exe hoặc .out
 
-    > Dùng câu lệnh gcc -o program main.c utils.c
+     Dùng câu lệnh gcc -o program main.c utils.c
 
 ## II. MACRO và chỉ thị tiền xử lý
   ### 1. Macro:
@@ -40,7 +40,7 @@
   #### 2.1. #include:
   - #include còn gọi là chỉ thị bao gồm tệp. Chỉ thị #include dùng để chèn nội dung của một file vào mã nguồn chương trình.
   - Có chức năng tái sử dụng mã nguồn và phân chia chương trình thành các phần nhỏ, giúp quản lý mã nguồn hiệu quả
-  - #include dùng dấu < > (ví dụ: #include <stdio.h>) dùng để include 1 thư viện chuẩn của c
+  - #include dùng dấu <  (ví dụ: #include <stdio.h) dùng để include 1 thư viện chuẩn của c
   - #include dùng dấu " " (ví dụ: #include "utilities.h") dùng để include 1 file tự viết trong thư mục hiện tại
 
   #### 2.2. #define:
@@ -48,7 +48,7 @@
   
   _Ex: dùng #define cho 1 value_
   ```c
-    #include <stdio.h>
+    #include <stdio.h
     // Định nghĩa hằng số Pi sử dụng #define
     #define PI 3.14
     int main() {
@@ -65,7 +65,7 @@
 
   _Ex: dùng #define cho 1 hàm_
   ```c
-    #include <stdio.h>
+    #include <stdio.h
     
     // Macro để tính bình phương của một số
     #define SQUARE(x) ((x) * (x))
@@ -82,10 +82,10 @@
 
   - Cần đặt dấu () để tránh lỗi toán tử
   ```c
-    #include <stdio.h>
+    #include <stdio.h
     
     // Định nghĩa macro để tìm số lớn hơn giữa hai số
-    #define MAX(x, y) ((x) > (y) ? (x) : (y))
+    #define MAX(x, y) ((x)  (y) ? (x) : (y))
     
     int main() {
         int a = 10, b = 20;
@@ -101,7 +101,7 @@
 
   - Đổi với #define cần nhiều hàng thì dùng kí tự '\' ở cuối dòng
   ```c
-    #include <stdio.h>
+    #include <stdio.h
 
     #define CREATE_FUNC(name, cmd) \
     void name()                    \
@@ -121,7 +121,7 @@
 
   _Ex:_
   ```c
-    #include <stdio.h>
+    #include <stdio.h
     
     // Định nghĩa SENSOR_DATA 
     #define SENSOR_DATA 42
@@ -153,7 +153,7 @@
 
   _Ex:_
   ```c
-    #include <stdio.h>
+    #include <stdio.h
     
     typedef enum
     {
@@ -236,7 +236,7 @@
 
   _Ex:_
   ```c
-    #include <stdio.h>
+    #include <stdio.h
     
     typedef enum{
         LOW,
@@ -266,10 +266,10 @@
             #if MCU == STM32
                 void digitalWrite(Pin pin, Status state) {
                     if (state == HIGH){
-                        GPIOA->BSRR = (1 << pin);  // Đặt bit tương ứng để thiết lập chân
+                        GPIOA-BSRR = (1 << pin);  // Đặt bit tương ứng để thiết lập chân
                     } 
                     else {
-                        GPIOA->BSRR = (1 << (pin + 16));  // Đặt bit tương ứng để reset chân
+                        GPIOA-BSRR = (1 << (pin + 16));  // Đặt bit tương ứng để reset chân
                     }
                 }
     
@@ -320,7 +320,7 @@
   file main.c:
 
   ```c
-    #include <stdio.h>
+    #include <stdio.h
     
     #include "abc.txt"
     #include "abc.txt"
@@ -351,7 +351,7 @@
   _Ex:_
 
   ```c
-    #include <stdio.h>
+    #include <stdio.h
     
     #define STRINGIZE(x) #x
     #define DATA 40
@@ -370,7 +370,7 @@
   _Ex:_
 
   ```c
-    #include <stdio.h>
+    #include <stdio.h
     
     #define CREATE_VAR(name, num) int name##num = num;
     
@@ -390,7 +390,7 @@
     __VA_ARGS__ đại diện cho tất cả các tham số truyền vào sau dấu ...
 
   ```c
-    #include <stdio.h>
+    #include <stdio.h
     
     #define LOG(fmt, ...) printf("[LOG] " fmt "\n", __VA_ARGS__)
     
@@ -408,7 +408,7 @@
   _##__VA_ARGS__ Variadic Macro không cần đối số:  Dấu ##__VA_ARGS__ giúp tránh lỗi nếu không có tham số nào truyền vào._
   
   ```c
-    #include <stdio.h>
+    #include <stdio.h
     
     // Định nghĩa macro DEBUG_PRINT với __VA_ARGS__
     #define DEBUG_PRINT(fmt, ...) printf("[DEBUG] " fmt "\n", ##__VA_ARGS__)
@@ -427,12 +427,12 @@
     }
   ```
     
-</details>
+</details
 
   ---
 
-<details>
-  <summary><font size="10"><b>📑 STDARG - ASSERT </b></front></summary>
+<details
+  <summary<font size="10"<b📑 STDARG - ASSERT </b</front</summary
   
   ---
 
@@ -451,8 +451,8 @@
   _Ex:_
 
   ```c
-    #include <stdarg.h>
-    #include <stdio.h>
+    #include <stdarg.h
+    #include <stdio.h
     
     // Hàm tính tổng các số
     int sum(int count, ...) {  //count dùng để xác định số lượng tham số
@@ -478,8 +478,8 @@
   _Ex: kiểu struct_
 
   ```c
-    #include <stdio.h>
-    #include <stdarg.h>
+    #include <stdio.h
+    #include <stdarg.h
     
     
     typedef struct Data
@@ -520,8 +520,8 @@
   _Ex: không có số lượng tham số truyền vào như ở ví dụ trên_
 
   ```c
-    #include <stdio.h>
-    #include <stdarg.h>
+    #include <stdio.h
+    #include <stdarg.h
     
     typedef enum {
         TEMPERATURE_SENSOR,
@@ -538,7 +538,7 @@
                 int sensorId = va_arg(args, int);
                 float temperature = va_arg(args, double); // float được promote thành double
                 printf("Temperature Sensor ID: %d, Reading: %.2f degrees\n", sensorId, temperature);
-                if (numArgs > 2) {
+                if (numArgs  2) {
                     // Xử lý thêm tham số nếu có
                     char* additionalInfo = va_arg(args, char*);
                     printf("Additional Info: %s\n", additionalInfo);
@@ -550,7 +550,7 @@
                 int sensorId = va_arg(args, int);
                 int pressure = va_arg(args, int);
                 printf("Pressure Sensor ID: %d, Reading: %d Pa\n", sensorId, pressure);
-                if (numArgs > 2) {
+                if (numArgs  2) {
                     // Xử lý thêm tham số nếu có
                     char* unit = va_arg(args, char*);
                     printf("Unit: %s\n", unit);
@@ -583,8 +583,8 @@
   _Ex:_
 
   ```c
-    #include <stdio.h>
-    #include <assert.h>
+    #include <stdio.h
+    #include <assert.h
     
     void divide(int a, int b) {
         assert(b != 0 && "Mau phai khac 0");  // Kiểm tra b có khác 0 không
@@ -600,13 +600,13 @@
     }
   ```
 
-  > Output: Assertion failed: b != 0 && "Mau phai khac 0", file main.c, line 6.
+   Output: Assertion failed: b != 0 && "Mau phai khac 0", file main.c, line 6.
 
   - Hoặc có thể dùng #define như sau:
 
   ```c
-    #include <stdio.h>
-    #include <assert.h>
+    #include <stdio.h
+    #include <assert.h
 
     #define LOG(condition, cmd) assert(condition && #cmd)  // '#' dùng để biến thành chuỗi
     
@@ -616,21 +616,21 @@
     }
   ```
 
-</details>
+</details
 
   ---
 
-<details>
-  <summary><font size="10"><b>📑 BITMASK </b></front></summary>
+<details
+  <summary<font size="10"<b📑 BITMASK </b</front</summary
   
   ---
 
-</details>
+</details
 
   ---
 
-<details>
-  <summary><font size="10"><b>📑 POINTER </b></front></summary>
+<details
+  <summary<font size="10"<b📑 POINTER </b</front</summary
   
   ---
 
@@ -646,7 +646,7 @@
     - MSB: Bit có trọng số lớn nhất (quan trọng nhất), thường là bit ngoài cùng bên trái trong hệ thống số nhị phân.
   
     _Ex:_
-      0b1011 0101 ======> ở đây LSB sẽ là bit 0 (giá trị là 0b1), MSB là bit 8 (giá trị là 0b1)
+      0b1011 0101 ====== ở đây LSB sẽ là bit 0 (giá trị là 0b1), MSB là bit 8 (giá trị là 0b1)
   - Endianness gồm có:
     - Little-Endian: LSB (byte) được lưu ở địa chỉ thấp nhất (phổ biến hiện nay).
 
@@ -670,8 +670,8 @@
       | `0x1002`  | `56`             | |
       | `0x1003`  | `78`             | *(LSB - Byte ít quan trọng nhất)* |
 
-  int var = 10 ===> có kích thước bộ nhớ 4 byte (Address: **0x01 0x02 0x03 0x04**)
-  int* ptr = &var ===> có kích thước 8 byte (Win 64bit), ví dụ như:
+  int var = 10 === có kích thước bộ nhớ 4 byte (Address: **0x01 0x02 0x03 0x04**)
+  int* ptr = &var === có kích thước 8 byte (Win 64bit), ví dụ như:
       Address:  0xc1 0xc2 0xc3 0xc4 0xc5 ... 0xc8
       Value:    0x01 0x02 0x03 0x04 0x00 ... 0x00 (4 byte còn lại không có giá trị lưu nên là 0x00)
 
@@ -680,7 +680,7 @@
   _Ex: truyền con trỏ vào 1 hàm_
 
   ```c
-    #include <stdio.h>
+    #include <stdio.h
     
     void swap(int* a, int* b)
     {
@@ -704,7 +704,7 @@
    _Ex: dùng con trỏ thao tác với mảng_
 
   ```c
-    #include <stdio.h>
+    #include <stdio.h
     
     int main()
     {
@@ -732,7 +732,7 @@
   _Ex:_
 
   ```c
-    #include <stdio.h>
+    #include <stdio.h
     
     int main()
     {
@@ -764,18 +764,20 @@
   - Con trỏ hàm cho phép truyền một hàm như đối số cho hàm khác, lưu địa chỉ hàm trong một cấu trúc dữ liệu, hoặc truyền hàm như một giá trị trả về từ hàm khác.
   - Syntax:
 
-    >  <return_type> (*func_poiter)(<data_type_1>, <data_type_2>);
-    > func_point = name_func (hoặc &name_func)  //gán địa chỉ hàm cho con trỏ hàm
+      <return_type (*func_poiter)(<data_type_1, <data_type_2);
+
+     func_point = name_func (hoặc &name_func)  //gán địa chỉ hàm cho con trỏ hàm
 
   - Để gọi hàm từ con trỏ hàm có thể dùng
 
-    > func_point()
-    > hoặc (*func_point)()
+     func_point()
+
+     hoặc (*func_point)()
 
   _Ex1:_
 
   ```c
-    #include <stdio.h>
+    #include <stdio.h
     
     void greetEnglish(){ printf("Hello!\n"); }
     void greetFrench(){ printf("Bonjour!\n"); }
@@ -866,9 +868,11 @@
   ### 3. Pointer to Constant (con trỏ hằng):
 
   - Con trỏ hằng là con trỏ **không thể thay đổi giá trị** tại địa chỉ mà nó trỏ tới thông qua phép giải tham chiếu dereference (*) nhưng giá      trị tại địa chỉ đó có thể thay đổi
+
   - Syntax:
 
     > <type> const *ptr_const = &value;
+
     > hay const <type> *ptr_const = &value;
 
   - Ứng dụng để giữ lại dữ liệu trước đó mà không muốn thay đổi nó trong quá trình xử lý.
@@ -971,7 +975,9 @@
   - Ví dụ:
 
     > int test = 5;              Address = 0x01; Value = 5
+
     > int *ptr = &test;          Address = &0xc2; Value = 0x01
+
     > int **ptp = &ptr;          Address = 0xee; Value = &0xc2
 
   - Ứng dụng trong kiểu dữ liệu JSON hay cấu trức dữ liệu danh sách liên kết
