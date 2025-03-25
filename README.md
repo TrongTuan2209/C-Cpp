@@ -48,7 +48,7 @@
   
   _Ex: dùng #define cho 1 value_
   ```c
-    #include <stdio.h
+    #include <stdio.h>
     // Định nghĩa hằng số Pi sử dụng #define
     #define PI 3.14
     int main() {
@@ -65,7 +65,7 @@
 
   _Ex: dùng #define cho 1 hàm_
   ```c
-    #include <stdio.h
+    #include <stdio.h>
     
     // Macro để tính bình phương của một số
     #define SQUARE(x) ((x) * (x))
@@ -82,7 +82,7 @@
 
   - Cần đặt dấu () để tránh lỗi toán tử
   ```c
-    #include <stdio.h
+    #include <stdio.h>
     
     // Định nghĩa macro để tìm số lớn hơn giữa hai số
     #define MAX(x, y) ((x)  (y) ? (x) : (y))
@@ -101,7 +101,7 @@
 
   - Đổi với #define cần nhiều hàng thì dùng kí tự '\' ở cuối dòng
   ```c
-    #include <stdio.h
+    #include <stdio.h>
 
     #define CREATE_FUNC(name, cmd) \
     void name()                    \
@@ -121,7 +121,7 @@
 
   _Ex:_
   ```c
-    #include <stdio.h
+    #include <stdio.h>
     
     // Định nghĩa SENSOR_DATA 
     #define SENSOR_DATA 42
@@ -153,7 +153,7 @@
 
   _Ex:_
   ```c
-    #include <stdio.h
+    #include <stdio.h>
     
     typedef enum
     {
@@ -236,7 +236,7 @@
 
   _Ex:_
   ```c
-    #include <stdio.h
+    #include <stdio.h>
     
     typedef enum{
         LOW,
@@ -320,7 +320,7 @@
   file main.c:
 
   ```c
-    #include <stdio.h
+    #include <stdio.h>
     
     #include "abc.txt"
     #include "abc.txt"
@@ -351,7 +351,7 @@
   _Ex:_
 
   ```c
-    #include <stdio.h
+    #include <stdio.h>
     
     #define STRINGIZE(x) #x
     #define DATA 40
@@ -370,7 +370,7 @@
   _Ex:_
 
   ```c
-    #include <stdio.h
+    #include <stdio.h>
     
     #define CREATE_VAR(name, num) int name##num = num;
     
@@ -390,7 +390,7 @@
     __VA_ARGS__ đại diện cho tất cả các tham số truyền vào sau dấu ...
 
   ```c
-    #include <stdio.h
+    #include <stdio.h>
     
     #define LOG(fmt, ...) printf("[LOG] " fmt "\n", __VA_ARGS__)
     
@@ -408,7 +408,7 @@
   _##__VA_ARGS__ Variadic Macro không cần đối số:  Dấu ##__VA_ARGS__ giúp tránh lỗi nếu không có tham số nào truyền vào._
   
   ```c
-    #include <stdio.h
+    #include <stdio.h>
     
     // Định nghĩa macro DEBUG_PRINT với __VA_ARGS__
     #define DEBUG_PRINT(fmt, ...) printf("[DEBUG] " fmt "\n", ##__VA_ARGS__)
@@ -427,12 +427,12 @@
     }
   ```
     
-</details
+</details>
 
   ---
 
-<details
-  <summary<font size="10"<b📑 STDARG - ASSERT </b</front</summary
+<details>
+  <summary><font size="10"><b>📑 STDARG - ASSERT </b></front></summary>
   
   ---
 
@@ -451,8 +451,8 @@
   _Ex:_
 
   ```c
-    #include <stdarg.h
-    #include <stdio.h
+    #include <stdarg.h>
+    #include <stdio.h>
     
     // Hàm tính tổng các số
     int sum(int count, ...) {  //count dùng để xác định số lượng tham số
@@ -478,8 +478,8 @@
   _Ex: kiểu struct_
 
   ```c
-    #include <stdio.h
-    #include <stdarg.h
+    #include <stdio.h>
+    #include <stdarg.h>
     
     
     typedef struct Data
@@ -520,8 +520,8 @@
   _Ex: không có số lượng tham số truyền vào như ở ví dụ trên_
 
   ```c
-    #include <stdio.h
-    #include <stdarg.h
+    #include <stdio.h>
+    #include <stdarg.h>
     
     typedef enum {
         TEMPERATURE_SENSOR,
@@ -583,8 +583,8 @@
   _Ex:_
 
   ```c
-    #include <stdio.h
-    #include <assert.h
+    #include <stdio.h>
+    #include <assert.h>
     
     void divide(int a, int b) {
         assert(b != 0 && "Mau phai khac 0");  // Kiểm tra b có khác 0 không
@@ -605,8 +605,8 @@
   - Hoặc có thể dùng #define như sau:
 
   ```c
-    #include <stdio.h
-    #include <assert.h
+    #include <stdio.h>
+    #include <assert.h>
 
     #define LOG(condition, cmd) assert(condition && #cmd)  // '#' dùng để biến thành chuỗi
     
@@ -616,21 +616,21 @@
     }
   ```
 
-</details
+</details>
 
   ---
 
-<details
-  <summary<font size="10"<b📑 BITMASK </b</front</summary
+<details>
+  <summary><font size="10"><b>📑 BITMASK </b></front></summary>
   
   ---
 
-</details
+</details>
 
   ---
 
-<details
-  <summary<font size="10"<b📑 POINTER </b</front</summary
+<details>
+  <summary><font size="10"><b>📑 POINTER </b></front></summary>
   
   ---
 
@@ -764,20 +764,20 @@
   - Con trỏ hàm cho phép truyền một hàm như đối số cho hàm khác, lưu địa chỉ hàm trong một cấu trúc dữ liệu, hoặc truyền hàm như một giá trị trả về từ hàm khác.
   - Syntax:
 
-      <return_type (*func_poiter)(<data_type_1, <data_type_2);
+    >  <return_type> (*func_poiter)(<data_type_1>, <data_type_2>);
 
-     func_point = name_func (hoặc &name_func)  //gán địa chỉ hàm cho con trỏ hàm
+    >  func_point = name_func (hoặc &name_func)  //gán địa chỉ hàm cho con trỏ hàm
 
   - Để gọi hàm từ con trỏ hàm có thể dùng
 
-     func_point()
+    >  func_point()
 
-     hoặc (*func_point)()
+    > hoặc (*func_point)()
 
   _Ex1:_
 
   ```c
-    #include <stdio.h
+    #include <stdio.h>
     
     void greetEnglish(){ printf("Hello!\n"); }
     void greetFrench(){ printf("Bonjour!\n"); }
