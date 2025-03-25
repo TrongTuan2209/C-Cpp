@@ -726,7 +726,7 @@
   - Void pointer là con trỏ dùng để trỏ tới địa chỉ mà tại đó không cần biết kiểu dữ liệu của giá trị mà địa chỉ đó đang lưu trữ
   - Void pointer giúp viết code linh hoạt hơn, phù hợp với lập trình tổng quát và xử lý dữ liệu động.
   - Void pointer còn dùng để tối ưu hóa bộ nhớ (vì dùng int*, hay float* sẽ bị phình bộ nhớ)
-  - Dungf void pointer khi lấy giá trị phải ép kiểu
+  - Dùng void pointer khi lấy giá trị phải ép kiểu
   - Syntax: **void* ptr**
 
   _Ex:_
@@ -769,8 +769,8 @@
 
   - Để gọi hàm từ con trỏ hàm có thể dùng
 
-    > ptr()
-    > hoặc (*ptr)()
+    > func_point()
+    > hoặc (*func_point)()
 
   _Ex1:_
 
@@ -804,47 +804,209 @@
   _Ex2:_
 
   ```c
-#include <stdio.h>
-
-void sum(int a, int b) { return a+b; }
-void subtract(int a, int b) { return a-b; }
-void multiple(int a, int b) { return a*b; }
-void devide(int a, int b) { return a/b; }
-
-===========================Cách 1================================
-int main()
-{
-  void (*calc)(int, int);
-
-  calc = sum;
-  calc(2,3);
-
-  calc = subtract;
-  calc(2,3);
-
-  ...
-
-  return 0;
-}
-
-===========================Cách 2==================================
-int main()
-{
-  void (*calc[])(int, int) = {sum, subtract, multiple, devide};
-  calc[0](2,3);
-  calc[1](2,3);
-  ...
-
-  return 0;
-}
-
-===========================Cách 3==================================
-void calculate(void (*calc)(int, int), int a, int b)
-{
-  
-} 
+    #include <stdio.h>
+    
+    void sum(int a, int b) { return a+b; }
+    void subtract(int a, int b) { return a-b; }
+    void multiple(int a, int b) { return a*b; }
+    void devide(int a, int b) { return a/b; }
+    
+    ===========================Cách 1================================
+    int main()
+    {
+      void (*calc)(int, int);
+    
+      calc = sum;
+      calc(2,3);
+    
+      calc = subtract;
+      calc(2,3);
+    
+      ...
+    
+      return 0;
+    }
+    
+    ===========================Cách 2==================================
+    int main()
+    {
+      void (*calc[])(int, int) = {sum, subtract, multiple, devide};
+      calc[0](2,3);
+      calc[1](2,3);
+      ...
+    
+      return 0;
+    }
+    
+    ===========================Cách 3==================================
+    void calculate(void (*calc)(int, int), int a, int b)
+    {
+      calc(a, b);
+    }
+    
+    int main()
+    {
+      calculate(sum, 2, 3);
+      ...
+    
+      return 0;
+    }
   ```
 
+  - So sánh giữa việc gọi hàm bằng con trỏ hàm và gọi hàm thông thường:
+
+  * Giống nhau:
+    
+    - Trong máy tính có thanh ghi program counter (PC). Khi ta khai báo 1 biến hay 1 hàm thì giá trị nó sẽ được gán cho 1 địa chỉ, ngoài ra         câu lệnh đó còn được gán cho 1 địa chỉ nằm trong thanh ghi PC. Do đó khi gọi hàm thông thường hay gọi hàm bằng con trỏ hàm đều gọi tại        địa chỉ trong PC
+   
+  * Khác nhau:
+
+    - Khi gọi hàm bằng con trỏ hàm sẽ linh hoạt hơn so với gọi hàm thông thường, do gọi hàm bằng con trỏ hàm sẽ có thế thay đổi mục đích của         hàm như ví dụ 2 cách 3.
+
+  ### 3. Pointer to Constant (con trỏ hằng):
+
+  - Con trỏ hằng là con trỏ **không thể thay đổi giá trị** tại địa chỉ mà nó trỏ tới thông qua phép giải tham chiếu dereference (*) nhưng giá      trị tại địa chỉ đó có thể thay đổi
+  - Syntax:
+
+    > <type> const *ptr_const = &value;
+    > hay const <type> *ptr_const = &value;
+
+  - Ứng dụng để giữ lại dữ liệu trước đó mà không muốn thay đổi nó trong quá trình xử lý.
+
+  _Ex:_
+
+  ```c
+    #include <stdio.h>
+    
+    int main()
+    {
+      int value = 5;
+      int test = 8;
+      int const *ptr_const = &value;
+    
+      printf("value: %d\n", *ptr_const);
+    
+      value = 9;
+    
+      printf("value: %d\n", *ptr_const);
+    
+      return 0;
+    }
+  ```
+
+  ### 3. Constant Pointer (hằng con trỏ)
+
+  - Hằng con trỏ là con trỏ trỏ đến địa chỉ không thể thay đổi. Nhưng giá trị tại đó có thể thay đổi được thông qua dereference.
+
+  - Syntax:
+
+    > <type> *const const_ptr = &value;
+
+  - Ứng dụng khi chỉ muốn thao tác tại 1 địa chỉ cố định, hay 1 vị trí cố định
+
+  _Ex:_
+  ```c
+    #include <stdio.h>
+    
+    int main()
+    {
+      int value = 5;
+      int test = 10;
+      int *const const_ptr  = &value;
+    
+      printf("value: %d\n", *const_ptr);
+      *const_ptr = test;
+      printf("value: %d\n", *const_ptr);
+    
+      **const_ptr = &test;  //wrong**
+    
+      return 0;
+    }
+  ```
+
+  - Có thể vừa dùng con trỏ hằng và hằng con trỏ như sau:
+
+    >   const int *const const_ptr  = &value;
+
+  ### 4. NULL Pointer
+
+  - Là con trỏ **không trỏ đến bất kì đối tượng** hoặc vùng nhớ cụ thể nào
+
+  - Dùng để khai báo khi chưa sử dụng con trỏ đó ngay lập tức (tránh bị trình biên dịch gán cho 1 địa chỉ random)
+
+  _Ex:_
+
+  ```c
+    #include <stdio.h>
+    
+    int main()
+    {
+        int *ptr = NULL;  // Gán giá trị NULL cho con trỏ 0x0000000
+    
+        if (ptr == NULL)
+        {
+            printf("Pointer is NULL\n");
+        }
+        else
+        {
+            printf("Pointer is not NULL\n");
+        }
+    
+        int score_game = 5;
+        if (ptr == NULL)
+        {
+            ptr = &score_game;
+            *ptr = 30;
+            ptr = NULL;
+        }
+        return 0;
+    }
+
+  ```
+
+  ### 5. Pointer to Pointer
+
+  - Pointer to Pointer (hay còn gọi là con trỏ cấp cao) là một kiểu dữ liệu mà cho phép lưu địa chỉ của 1 con trỏ khác.\
+
+  - Ví dụ:
+
+    > int test = 5;              Address = 0x01; Value = 5
+    > int *ptr = &test;          Address = &0xc2; Value = 0x01
+    > int **ptp = &ptr;          Address = 0xee; Value = &0xc2
+
+  - Ứng dụng trong kiểu dữ liệu JSON hay cấu trức dữ liệu danh sách liên kết
+  
+  _Ex:_
+  ```c
+#include <stdio.h>
+
+int main()
+{
+  int value = 41;
+  int *ptr = &value;
+  int **ptp = &ptr;
+
+  /*
+    **ptp = &ptr
+    ptp = &ptr
+    *ptp = ptr = &value
+    **ptp = *ptr = value
+
+    printf("address of value: %p\n", &value);
+    printf("value of ptr: %p\n", ptr);
+
+    printf("address of ptr: %p\n", &ptr);
+    printf("value of ptrp: %p\n", ptp);
+
+    printf("dereference ptp first time: %p\n", *ptp);
+    printf("dereference ptp second time: %d\n", **ptp);
+
+    return 0;
+}
+
+
+
+  ```
 </details>
 
 
