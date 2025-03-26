@@ -1,5 +1,6 @@
 # Advance C
-<h3>📕 SUMMARY </h3>
+<h2>📕 SUMMARY </h2>
+
 <details>
   <summary><font size="10"><b>📑 COMPILER - MACRO </b></front></summary>
 
@@ -1015,9 +1016,58 @@ int main()
   ```
 </details>
 
+  ---
 
+<details>
+  <summary><font size="10"><b>📑 STORAGE CLASS </b></front></summary>
+  
+  ---
 
+</details>
 
+  ---
+
+<details>
+  <summary><font size="10"><b>📑 GOTO - setjmp.h </b></front></summary>
+  
+  ---
+
+  ## I. Goto
+
+  - Goto là một từ khóa trong C, cho phép chương trình nhảy đến 1 label đã được đặt trước trong **cùng một hàm**.
+
+  - Goto giúp kiểm soát flow của chương trình, nhưng nó làm cho source code trở nên khó đọc và bảo trì.
+
+  _Ex:_
+
+  ```c
+
+#include <stdio.h>
+
+int main(()
+{
+  int i = 0;
+
+  //Đặt nhãn
+  start:
+    if (i >= 5)
+    {
+        goto end;  // chuyển control đến nhãn "end"
+    }
+
+    printf("%d", i);
+    i++;
+
+    goto start;  // chuyển control đến nhãn "start"
+
+  end:
+    printf("/n");
+
+  return 0;
+}
+  ```
+
+</details>
 
 
 
