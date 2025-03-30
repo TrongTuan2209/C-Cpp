@@ -971,7 +971,7 @@
 
   ### 5. Pointer to Pointer
 
-  - Pointer to Pointer (hay còn gọi là con trỏ cấp cao) là một kiểu dữ liệu mà cho phép lưu địa chỉ của 1 con trỏ khác.\
+  - Pointer to Pointer (hay còn gọi là con trỏ cấp cao) là một kiểu dữ liệu mà cho phép lưu địa chỉ của 1 con trỏ khác.
 
   - Ví dụ:
 
@@ -985,35 +985,34 @@
   
   _Ex:_
   ```c
-#include <stdio.h>
-
-int main()
-{
-  int value = 41;
-  int *ptr = &value;
-  int **ptp = &ptr;
-
-  /*
-    **ptp = &ptr
-    ptp = &ptr
-    *ptp = ptr = &value
-    **ptp = *ptr = value
-
-    printf("address of value: %p\n", &value);
-    printf("value of ptr: %p\n", ptr);
-
-    printf("address of ptr: %p\n", &ptr);
-    printf("value of ptrp: %p\n", ptp);
-
-    printf("dereference ptp first time: %p\n", *ptp);
-    printf("dereference ptp second time: %d\n", **ptp);
-
-    return 0;
-}
-
-
+    #include <stdio.h>
+    
+    int main()
+    {
+      int value = 41;
+      int *ptr = &value;
+      int **ptp = &ptr;
+    
+      /*
+        **ptp = &ptr
+        ptp = &ptr
+        *ptp = ptr = &value
+        **ptp = *ptr = value
+    
+        printf("address of value: %p\n", &value);
+        printf("value of ptr: %p\n", ptr);
+    
+        printf("address of ptr: %p\n", &ptr);
+        printf("value of ptrp: %p\n", ptp);
+    
+        printf("dereference ptp first time: %p\n", *ptp);
+        printf("dereference ptp second time: %d\n", **ptp);
+    
+        return 0;
+    }
 
   ```
+
 </details>
 
   ---
@@ -1066,6 +1065,173 @@ int main(()
   return 0;
 }
   ```
+
+  *Kỹ thuật quét LED Matrix:
+
+  - Vi điều khiển sẽ quét từng hàng trong LED Matrix, và sẽ bật những LED cần sáng trong hàng đó, sau đó nó sẽ tắt đi và quét hàng tiếp theo. Vì tốc độ xử lý của VĐK rất nhanh nên ta có cảm giác như nó sáng liên tục.
+
+  ## II. Thư viện setjmp.h
+
+  - setjmp.h là một thư viện trong C, gồm 2 hàm chính là setjmp và longjmp:
+
+      - setjmp(jmp_buf env): Đánh dấu vị trí để có thể quay lại bằng longjmp
+
+        > trả về 0 khi gọi lần đầu, và giá trị khác 0 khi quay lại từ longjmp
+
+        - Cách thức hoạt động: biến jmp_buf là biến đặc biệt dùng để lưu giá trị là địa chỉ câu lệnh đặt setjmp do PC cung           cấp.
+
+    - longjmp(jmp_buf env, int value): nhảy về vị trí hiện tại của setjmp và tiếp tục thực thi từ đó
+
+      > Biến value là giá trị mà setjmp sẽ trả về ở lần gọi tiếp theo.
+          
+  - Dùng để thực hiện xử lý ngoại lệ trong C.
+
+  _Ex:_
+  
+  ```c
+  
+    #include <stdio.h>
+    #include <setjmp.h>
+    
+    jmp_buf buf;
+    
+    int exception = 0;
+    
+    void func2()
+    {
+        printf("This is function 2\n");
+        longjmp(buf, 2);
+    }
+    
+    void func3()
+    {
+        printf("This is function 3\n");
+        longjmp(buf, 3);
+    }
+    
+    void func1()
+    {
+        exception = setjmp(buf);
+        if (exception == 0)
+        {
+            printf("This is function 1\n");
+            printf("exception = %d\n", exception);
+            func2();
+        }
+        else if (exception == 2)
+        {
+            printf("exception = %d\n", exception);
+            func3();
+        }
+        else if (exception == 3)
+        {
+            printf("exception = %d\n", exception);
+        }
+    }
+    
+    int main(int argc, char const *argv[])
+    {
+        func1();
+        return 0;
+    }
+  
+  ```
+
+  ## III. Exception Handling
+
+  - Xử lý ngoại lệ giúp phát hiện và xử lý các lỗi hoặc tình huống bất thường xảy ra trong quá trình thực thi chương trình.
+
+  #### 3.1. Exception
+
+  - Ngoại lệ là những lỗi hoặc tình huống không mong muốn xảy ra, như:
+
+    - Chia một số cho 0 (division by zero).
+
+    - Truy cập mảng ngoài phạm vi (out of bounds array access).
+
+    - Truy xuất con trỏ null (null pointer dereference).
+
+    - Lỗi khi mở hoặc đọc tập tin (file not found).
+
+    - Lỗi cấp phát bộ nhớ (bad allocation).
+   
+  #### 3.2. Cơ chế xử lý Exception
+
+  - Hầu hết các ngôn ngữ lập trình hiện đại như C++, Java, Python, C# đều hỗ trợ xử lý ngoại lệ thông qua các từ khóa như:
+
+    - **try:** Định nghĩa một khối lệnh có thể phát sinh lỗi.
+   
+    - **catch:** Xử lý ngoại lệ nếu có lỗi xảy ra.
+
+    - **throw:** Ném ra một ngoại lệ khi xảy ra lỗi.
+   
+  - Nhưng trong C không có cơ chế này, do đó cần dùng thư viện setjmp.h
+
+  _Ex:_
+
+  ```c
+
+    #include <stdio.h>
+    #include <setjmp.h>
+    
+    jmp_buf buf;
+    
+    int exception_code;
+    
+    typedef enum
+    {
+        NO_ERROR,
+        NO_EXIT,
+        DIVIDE_BY_0
+    } ErrorCodes;  
+    
+    #define TRY if ((exception_code = setjmp(buf)) == 0)
+    #define CATCH(x) else if (exception_code == x)
+    #define THROW(x) longjmp(buf, x)
+    
+    double divide(int a, int b)
+    {
+        if (a == 0 && b == 0)
+        {
+            THROW(NO_EXIT);
+        }
+        else if (b == 0)
+        {
+            THROW(DIVIDE_BY_0);
+        }
+    
+        return (double)a/b;
+    }
+    
+    int main(int argc, char const *argv[])
+    {
+        exception_code = NO_ERROR;
+    
+        TRY
+        {
+            printf("Ket qua: %0.3f\n", divide(0,0));
+        }
+        CATCH(NO_EXIT)
+        {
+            printf("ERROR! Không tồn tại\n");
+        }
+        CATCH(DIVIDE_BY_0)
+        {
+            printf("ERROR! Chia cho 0\n");
+        }
+    
+        // thêm code ở đây
+        printf("Hello world\n");
+        return 0;
+    }
+
+  ```
+
+  - So sánh Exception Handling and ASSERT:
+
+    - ASSERT sẽ dừng chương trình ngay lập tức khi điều kiện sai
+   
+    - Exception Handling sẽ không dừng chương trình mà chỉ đưa ra báo lỗi và chạy tiếp
 
 </details>
 
