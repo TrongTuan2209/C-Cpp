@@ -671,9 +671,12 @@
       | `0x1002`  | `56`             | |
       | `0x1003`  | `78`             | *(LSB - Byte ít quan trọng nhất)* |
 
-  int var = 10 === có kích thước bộ nhớ 4 byte (Address: **0x01 0x02 0x03 0x04**)
-  int* ptr = &var === có kích thước 8 byte (Win 64bit), ví dụ như:
+  int var = 10 ===> có kích thước bộ nhớ 4 byte (Address: **0x01 0x02 0x03 0x04**)
+  
+  int* ptr = &var ===> có kích thước 8 byte (Win 64bit), ví dụ như:
+  
       Address:  0xc1 0xc2 0xc3 0xc4 0xc5 ... 0xc8
+      
       Value:    0x01 0x02 0x03 0x04 0x00 ... 0x00 (4 byte còn lại không có giá trị lưu nên là 0x00)
 
   ## III. Cách sử dụng con trỏ
@@ -750,10 +753,10 @@
       char arr[] = "Hello World";
 
       //Mảng con trỏ void
-      void* ptr1[] = {&a, &b, arrr};
+      void* ptr1[] = {&a, &b, arr};
       printf("Địa chỉ: %p - Value: %d\n", ptr1[0], *(int*)ptr1[0]);
-      printf("Địa chỉ: %p - Value: %f\n", ptr1[1], *(int*)ptr1[1]);
-      printf("Địa chỉ: %p - Value: %c\n", ptr1[2], *(int*)ptr1[2]);     
+      printf("Địa chỉ: %p - Value: %f\n", ptr1[1], *(double*)ptr1[1]);
+      printf("Địa chỉ: %p - Value: %c\n", ptr1[2], *(char*)ptr1[2]+1);     
 
     return 0;
     }
@@ -872,9 +875,9 @@
 
   - Syntax:
 
-    > <type> const *ptr_const = &value;
+    > `<type>` const *ptr_const = &value;
 
-    > hay const <type> *ptr_const = &value;
+    > hay const `<type>` *ptr_const = &value;
 
   - Ứng dụng để giữ lại dữ liệu trước đó mà không muốn thay đổi nó trong quá trình xử lý.
 
