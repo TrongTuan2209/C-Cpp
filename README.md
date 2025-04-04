@@ -908,7 +908,7 @@
 
   - Syntax:
 
-    > <type> *const const_ptr = &value;
+    > `<type>` *const const_ptr = &value;
 
   - Ứng dụng khi chỉ muốn thao tác tại 1 địa chỉ cố định, hay 1 vị trí cố định
 
