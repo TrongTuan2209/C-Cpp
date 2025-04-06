@@ -871,7 +871,7 @@
 
   ### 3. Pointer to Constant (con trỏ hằng):
 
-  - Con trỏ hằng là con trỏ **không thể thay đổi giá trị** tại địa chỉ mà nó trỏ tới thông qua phép giải tham chiếu dereference (*) nhưng giá      trị tại địa chỉ đó có thể thay đổi
+  - Con trỏ hằng là con trỏ **không thể thay đổi giá trị** tại địa chỉ mà nó trỏ tới thông qua phép giải tham chiếu            dereference (*) nhưng giá trị tại địa chỉ đó có thể thay đổi
 
   - Syntax:
 
@@ -1021,9 +1021,89 @@
   ---
 
 <details>
-  <summary><font size="10"><b>📑 STORAGE CLASS </b></front></summary>
+  <summary><font size="10"><b>📑 STORAGE CLASSES </b></front></summary>
   
   ---
+
+  ## I. Extern
+
+  - Trong một số tình huống ta không sử dụng #include, vì:
+
+    - #include nhiều lần 1 file sẽ gây ra lỗi
+   
+    - #include sẽ copy toàn bộ code trong file đó vào file được include, nên nếu ta chỉ muốn sử dụng 1 vài biến hoặc hàm         trong file đó chứ không muốn sử dụng toàn bộ thì sẽ gây tốn bộ nhớ
+
+    => Extern sẽ giải quyết được các vấn đề này
+
+  - Extern là từ khóa trong C/C++ dùng để thông báo rằng 1 biến hoặc hàm đã được khai báo ở một nơi khác trong chương          trình hoặc trong một file khác.
+
+  - Extern chỉ thông báo chứ không được gán giá trị mới vào hoặc định nghĩa lại hàm khi khai báo extern 
+
+  - Để sử chạy được chương trình thì phải liên kết các file lại bằng:
+
+  >               gcc main.c File1.c -o main
+
+  _Ex:_
+
+  File test.c
+
+  ```c
+    #include <stdio.h>
+
+    int var_global = 50;
+
+    void display()
+    {
+      printf(...);
+    }
+
+  ```
+
+  File main.c
+
+  ```c
+    #include <stdio.h>
+
+    extern int var_global;
+
+    extern void display();
+
+    int main(int argc, char const* argv[])
+    {
+      display();
+      return 0;
+    }
+
+  ```
+
+  _Ex: Ứng dụng trong thiết kế thư viện_
+
+  File1.h
+
+  ```c
+    ifndef FILE1_H
+    #define FILE1_H
+
+    extern int var_global;
+    extern void display();
+
+    #endif
+  ```
+
+  main.c
+
+  ```c
+    #include <stdio.h>
+    #include "File1.h"
+
+    int main(int argc, char const* argv[])
+    {
+      var_global = 40;
+      display();
+      return 0;
+    }
+
+  ```
 
 </details>
 
