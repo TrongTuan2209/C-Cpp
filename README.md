@@ -1031,11 +1031,11 @@
 
     - #include nhiều lần 1 file sẽ gây ra lỗi
    
-    - #include sẽ copy toàn bộ code trong file đó vào file được include, nên nếu ta chỉ muốn sử dụng 1 vài biến hoặc hàm         trong file đó chứ không muốn sử dụng toàn bộ thì sẽ gây tốn bộ nhớ
+    - #include sẽ copy toàn bộ code trong file đó vào file được include, nên nếu ta chỉ muốn sử dụng 1 vài biến hoặc hàm trong file đó chứ không muốn sử dụng toàn bộ thì sẽ gây tốn bộ nhớ
 
     => Extern sẽ giải quyết được các vấn đề này
 
-  - Extern là từ khóa trong C/C++ dùng để thông báo rằng 1 biến hoặc hàm đã được khai báo ở một nơi khác trong chương          trình hoặc trong một file khác.
+  - Extern là từ khóa trong C/C++ dùng để thông báo rằng 1 biến hoặc hàm đã được khai báo ở một nơi khác trong chương trình hoặc trong một file khác.
 
   - Extern chỉ thông báo chứ không được gán giá trị mới vào hoặc định nghĩa lại hàm khi khai báo extern 
 
@@ -1102,6 +1102,209 @@
       display();
       return 0;
     }
+
+  ```
+
+  ## II. Static Local
+
+  - Khi static được sử dụng với biến cục bộ, nó sẽ giữ phạm vi biến chỉ trong hàm đó, và nó sẽ giữ giá trị của biến qua các lần gọi hàm (không bị khởi tạo lại       sau mỗi lần gọi hàm)
+
+  _Ex:_
+
+  ```c
+
+    #include <stdio.h>
+    
+    void exampleFunction()
+    {
+        static int count = 0;  // Biến static giữ giá trị qua các lần gọi hàm
+        count++;
+        printf("Count: %d\n", count);
+    }
+    
+    int main()
+    {
+        exampleFunction();  // In ra "Count: 1"
+        exampleFunction();  // In ra "Count: 2"
+        exampleFunction();  // In ra "Count: 3"
+        return 0;
+    }
+
+  ```
+
+  - Static Local có 1 địa chỉ cố định, nên có thể thay đổi giá trị thông qua con trỏ toàn cục
+
+  ## III. Static Global
+
+  - Khi static được sử dụng với biến hoặc hàm toàn cục thì nó sẽ giới hạn phạm vi của biến và hàm chỉ trong file nguồn hiện tại
+
+  - Ứng dụng để thiết kế thư viện
+
+  - Dùng static global để bảo vệ code, không bị gọi những hàm hoặc biến không cần thiết làm thay đổi kết quả chương trình
+
+  _Ex:_ 
+  
+  File calculation.h
+
+  ```c
+
+    #include <math.h>
+    
+    typedef struct
+    {
+        float x1;
+        float x2;
+    } Equation;
+    
+    static int A,B,C;
+    
+    void inputCoefficients(int a, int b, int c)
+    {
+       A = a;
+       B = b;
+       C = c;
+    }
+    
+    static float calculateDelta(){ return B * B - 4 * A * C; }
+    
+    void result(Equation *equation)
+    {
+       float delta = calculateDelta();
+       if (delta > 0)
+       {
+          equation->x1 = (-B + sqrt(delta)) / (2 * A);
+          equation->x2 = (-B - sqrt(delta)) / (2 * A);
+       }
+       else if (delta == 0)
+       {
+          equation->x1 = equation->x2 = -B / (2 * A);
+       }
+       else
+       {
+          equation->x1 = equation->x2 = -1;
+       }
+    }
+
+  ```
+
+  File motor.c
+
+   ```c
+
+    #include <stdio.h>
+    #include "motor.h"
+    // General function
+    void startMotor(PIN pin){
+       printf("Start motor at PIN %d\n", pin);
+    }
+    
+    void stopMotor(PIN pin){
+       printf("Stop motor at PIN %d\n", pin);
+    }
+    
+    void changeSpeedMotor(PIN pin, int speed){
+       printf("Change speed at PIN %d: %d\n", pin, speed);
+    }
+     
+    void init_motor(MotorController *motorName){
+       motorName->start = startMotor;
+       motorName->stop = stopMotor;
+       motorName->changeSpeed = changeSpeedMotor;
+
+  ```
+
+  File motor.h
+
+   ```c
+
+    #ifndef MOTOR_H
+    #define MOTOR_H
+    
+    typedef struct
+    {
+       void (*start)(int gpio);
+       void (*stop)(int gpio);
+       void (*changeSpeed)(int gpio, int speed);
+    } MotorController;
+    
+    typedef int PIN;
+    
+    static void startMotor(PIN pin);
+    static void stopMotor(PIN pin);
+    static void changeSpeedMotor(PIN pin, int speed);
+    
+    void init_motor(MotorController *motorName);
+    
+    #endif   // MOTOR_H
+
+
+  ```
+
+  ## IV. Volatile
+
+  - Từ khóa **volitile** dùng để thông báo cho trình biên dịch biết rằng 1 biến có thể thay đổi ngẫu nhiên ngoài sự kiểm soát của chương trình.
+
+  - Nếu không dùng **volitile** thì 1 biến khi không thay đổi quá lâu thì trình biên dịch sẽ tối ưu hay xóa bỏ các thao tác nhằm thay đổi giá trị trên biến đó.
+
+  _Ex:_
+
+  ```
+
+    #include "stm32f10x.h"
+    
+    volatile int i = 0;
+    
+    int a = 100;
+    
+    int main()
+    {
+       while(1)
+       {
+          i = *((int*) 0x20000000); //nếu không dùng volitile thì lâu quá không thay đổi giá trị i thì compiler sẽ bỏ qua thao tác biến đổi giá trị của i
+          if (i > 0) break;
+       }
+       a = 200;
+
+  ```
+
+  ## V. Resigter
+
+  - Một biến khi muốn tính toán thì phải trải qua các bước:
+
+    biến và phép toán được lưu ở RAM ===> được đưa vào thanh ghi (Register) ===> đưa chúng vào ALU (Arithmetic Logic Unit) ===> trả về kết quả tính toán cho         Register ===> cuối cùng đưa kết quả về RAM
+
+  - Từ khóa **Register** được dùng để chỉ ra muốn lưu trữ 1 biến ở trong thanh ghi máy tính chứ không phải ở RAM ===> tăng tốc độ truy cập
+
+  - Nhưng nó chỉ là đề xuất cho compiler chứ không chắc chắn compiler sẽ lưu nó vào thanh ghi.
+
+  - Không dùng cho biến toàn cục
+
+  _Ex:_
+
+  ```
+
+    #include <stdio.h>
+    #include <time.h>
+    
+    int main()
+    {
+       // Lưu thời điểm bắt đầu
+       clock_t start_time = clock();
+       register int i;
+    
+       // Đoạn mã của chương trình
+       for (i = 0; i < 2000000; ++i){}
+    
+       // Lưu thời điểm kết thúc
+       clock_t end_time = clock();
+    
+       // Tính thời gian chạy bằng miligiây
+       double time_taken = ((double)(end_time - start_time)) / CLOCKS_PER_SEC;
+    
+       printf("Thoi gian chay cua chuong trinh: %f giay\n", time_taken);
+       return 0;
+    }
+
 
   ```
 
