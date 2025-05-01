@@ -1522,8 +1522,213 @@ int main(()
 </details>
 
 
+  ---
+
+<details>
+  <summary><font size="10"><b>📑 Struct - Union </b></front></summary>
+  
+  ---
+
+  ## I. Struct
+  
+  #### 1.1. Định nghĩa
+  
+  - Struct là một cấu trúc dữ liệu cho phép ta định nghĩa một kiểu dữ liệu mới bằng cách nhóm các biến có kiểu dữ liệu khác lại với nhau.
+  
+  - Struct cho phép ta tạo ra một thực thể dữ liệu lớn hơn và có tổ chức hơn từ các member của nó.
+
+  - Syntax:
+
+    - Cách 1:
+  
+    ```c
+      struct name_struct
+      {
+        <data_type1> <member1>;
+        <data_type2> <member2>;
+        ...
+      };
+    ```
+
+    - Cách 2:
+  
+    ```c
+      typedef struct
+      {
+        <data_type1> <member1>;
+        <data_type2> <member2>;
+        ...
+      } name_struct;
+    ```
+
+  * typedef dùng để tạo một bí danh (alias) cho một kiểu dữ liệu có nghĩa là nó sẽ thay thế tên mới cho khai báo dữ liệu dài dòng.
+
+  _Ex1:_
+
+  ```c
+
+    typedef unsigned long UL;
+    UL number = 123456789;     // UL là bí danh của unsigned long
+
+  ```
+  _Ex2:_
+  
+  ```c
+
+    typedef struct {
+    int x;
+    int y;
+    } Point;
+    
+    Point p1; // Point là bí danh của struct, thay vì viết struct Point p1
+    p1.x = 10;
+    p1.y = 20;
+
+  ```
+
+  - Cách sử dụng struct:
+
+  ```c
+    struct User
+    {
+      char* name;
+      int age;
+      char* add;
+    };
+
+    struct User user1, user2, *user3;
+
+    int main()
+    {
+      user1.name = "avc";
+      user1.age = 18;
+      user1.add = "buvf";
+
+      user3->name = "jfn";
+      user3->age = 20;
+      user3->add = "hgg";
+
+      return 0;
+    }
+
+  ```
+
+  - Có thể sử dụng **typedef** như sau:
+
+  ```c
+    typedef struct
+    {
+      char* name;
+      int age;
+      char* add;
+    } User;
+
+    User user1, user2, *user3;
+
+    int main()
+    {
+      user1.name = "avc";
+      user1.age = 18;
+      user1.add = "buvf";
+
+      user3->name = "jfn";
+      user3->age = 20;
+      user3->add = "hgg";
+
+      return 0;
+    }
+
+  ```
+
+  **NOTE:**
+
+  - Để gọi các member trong struct cần lưu ý với các biến thông thường ta gọi member bằng kí tự '.', còn với biến con trỏ thì sử dụng '->'
+
+  #### 1.2. Data Alignment
+
+  - Các biến trong struct sẽ được cấp phát dữ liệu ở địa chỉ theo quy định của CPU, cụ thể:
+
+    - Các biến kích thước 8 byte (như float, con trỏ) phải nằm ở những địa chỉ chia hết cho 8 (0x00, 0x08, 0x10, ...)
+   
+    - Các biến kích thước 4 byte (như int, int32_t, uint32_t, ...) phải nằm ở những địa chỉ chia hết cho 4 (0x00, 0x04, 0x08, 0x0C, ...)
+   
+    - Tương tự cho các biến 2 byte và 1 byte
+    
+
+  ### 1.3. Data Padding
+
+  - Khi cấp phát bộ nhớ cho struct thì trình biên dịch sẽ dựa vào member có kích thước lớn nhất để cấp phát, nó sẽ cấp phát theo thứ tự member được khai báo và sẽ cấp phát các ô nhớ liền kề nhau
+
+  _Ex:_
+
+  ```c
+    typedef struct
+    {
+      char name;   //0xa0, 0xa1, 0xa2, 0xa3 (3 bytes padding)
+      int age;     //0xa4, 0xa5, 0xa6, 0xa7
+      char* add;   //0xa8, 0xa9, ..., 0xaf
+    } User;
+  ```
+
+  - Nó sẽ cấp phát 8 byte (vì kiểu char* lớn nhất với 8 byte), ví dụ: 0xa0, 0xa1, 0xa2, 0xa3, 0xa4, ..., 0xa7 ===> **char name** được khai báo đầu tiên và sẽ được cấp 8 byte địa chỉ, nhưng nó chỉ dùng 1 byte 0xa0 và các byte còn lại là bytes padding.
+
+  - Các bytes padding có thể được dùng lại theo nguyên tắc của Data Alignment, nên các **int age** sẽ nhận địa chỉ là 0xa4, 0xa5, 0xa6, 0xa7
+
+  - char* add phải được cấp thêm 8 bytes địa chỉ mới là 0xa8, 0xa9, ..., 0xaf
+
+  - Kích thước của struct sẽ gồm tổng số bytes được cấp, ở ví dụ trên là 8 bytes. Và có 3 bytes padding
+
+  - Tương tự cho mảng array
+
+  _Ex:_
+
+  ```c
+
+    typedef struct
+    {
+      uint8_t var1[9];
+      uint64_t var2[3];
+      uint16_t var3[10];
+      uint32_t var4[2];
+    } Frame;
+  
+  ```
+
+  =====> Kích thước của struct Frame là **72 bytes** (11 padding)
+
+  ## II. Bit field
+
+  - Bit field là một thành phần đặc biệt trong struct dùng để giới hạn số lượng bit cần dùng để lưu trữ một biến số nguyên.
+
+  - Syntax:
+
+  ```c
+
+    struct name_struct 
+    {
+        <data type 1> <member 1> : <number of bits>;
+        <data type 2> <member 2> : <number of bits>;
+        // ...
+    };
+
+  ```
+
+  _Ex:_
+
+  ```c
+
+    struct Example 
+    {
+        int32_t flag  : 1;	// chỉ sử dụng 1 trong 32 bit
+        int64_t count : 4;	// chỉ sử dụng 4 trong 64 bit
+    };
+
+  ```
+
+  - Không thể sử dụng toán tử "&" để lấy địa chỉ của member sử dụng bit field
 
 
+</details>
 
 
 
